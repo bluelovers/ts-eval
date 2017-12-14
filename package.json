@@ -1,6 +1,6 @@
 {
   "name": "ts-eval",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "eval(transpile(tscode)) function evaluates TypeScript code.",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "deepmerge": "^2.0.1",
     "find-up": "^2.1.0",
     "json5": "^0.5.1",
     "pkg-dir": "^2.0.0",
