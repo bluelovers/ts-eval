@@ -10,6 +10,7 @@ import * as path from 'path';
 import * as util from 'util';
 import * as vm from 'vm';
 import * as JSON5 from 'json5';
+import * as deepmerge from 'deepmerge';
 
 export let TSCONFIG_FILENAME = 'tsconfig.json';
 export let defaultTranspileOptions = {
@@ -83,9 +84,11 @@ export function tsOptions(transpileOptions?, ...argv)
 
 	//console.log(transpileOptions);
 
-	return Object.assign({
-		newLine: "lf",
-	}, transpileOptions, ...argv);
+	return deepmerge.all([
+		{
+			newLine: "lf",
+		}, transpileOptions
+	].concat(argv));
 }
 
 export function transpile(code, transpileOptions?): string
