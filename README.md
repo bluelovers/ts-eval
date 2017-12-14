@@ -14,7 +14,7 @@ import * as tsEval from 'ts-eval';
 ```
 
 ```javascript
-console.log(eval(transpileEval(`/**
+console.log(eval(tsEval.transpileEval(`/**
  * Created by user on 2017/12/14/014.
  */
 import * as path from 'path';path;/**
@@ -23,7 +23,7 @@ import * as path from 'path';path;/**
 ```
 
 ```javascript
-console.log(evalSandbox(`/**
+console.log(tsEval.evalSandbox(`/**
  * Created by user on 2017/12/14/014.
  */
 import * as path from 'path';path;/**
