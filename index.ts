@@ -5,9 +5,13 @@
 import * as ts from 'typescript';
 import * as findUp from 'find-up';
 import * as pkgDir from 'pkg-dir';
+// @ts-ignore
 import * as fs from 'fs';
+// @ts-ignore
 import * as path from 'path';
+// @ts-ignore
 import * as util from 'util';
+// @ts-ignore
 import * as vm from 'vm';
 import * as JSON5 from 'json5';
 import * as deepmerge from 'deepmerge';
@@ -34,10 +38,12 @@ export function _require(path: string)
 	return JSON5.parse(fs.readFileSync(path));
 }
 
+// @ts-ignore
 export function search_tsconfig(cwd: string = process.cwd()): string
 {
 	if (!path.isAbsolute(cwd))
 	{
+		// @ts-ignore
 		cwd = path.join(process.cwd(), cwd);
 	}
 
@@ -145,7 +151,6 @@ export function evalSandbox(code, sandbox?, transpileOptions?)
 	return vm.runInContext(code, vm.isContext(sandbox) ? sandbox : vm.createContext(sandbox));
 }
 
-// @ts-ignore
-export const tsEval = exports;
-// @ts-ignore
-export default exports;
+import * as tsEval from './index';
+export { tsEval };
+export default tsEval;
