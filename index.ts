@@ -32,11 +32,11 @@ export let defaultTranspileOptions = {
  * @returns {*}
  * @private
  */
-export function _require(path: string)
+export let _require = function (path: string)
 {
 	//return require(path);
 	return JSON5.parse(fs.readFileSync(path));
-}
+};
 
 // @ts-ignore
 export function search_tsconfig(cwd: string = process.cwd()): string
