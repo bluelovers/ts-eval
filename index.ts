@@ -35,7 +35,7 @@ export let defaultTranspileOptions = {
 export let _require = function (path: string)
 {
 	//return require(path);
-	return JSON5.parse(fs.readFileSync(path));
+	return JSON5.parse(fs.readFileSync(path).toString());
 };
 
 // @ts-ignore
