@@ -1,36 +1,53 @@
 {
   "name": "ts-eval",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "eval(transpile(tscode)) function evaluates TypeScript code.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "keywords": [
+    "eval",
+    "transpile",
+    "ts",
+    "typescript",
+    "vm"
+  ],
+  "homepage": "https://github.com/bluelovers/ts-eval#readme",
+  "bugs": {
+    "url": "https://github.com/bluelovers/ts-eval/issues"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "deepmerge": "^2.0.1",
-    "find-up": "^2.1.0",
-    "json5": "^0.5.1",
-    "pkg-dir": "^2.0.0"
-  },
-  "peerDependencies": {
-    "typescript": "^2.6.2"
-  },
-  "devDependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bluelovers/ts-eval.git"
   },
-  "keywords": [
-    "ts",
-    "typescript",
-    "transpile",
-    "vm",
-    "eval"
-  ],
-  "bugs": {
-    "url": "https://github.com/bluelovers/ts-eval/issues"
+  "license": "ISC",
+  "author": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
   },
-  "homepage": "https://github.com/bluelovers/ts-eval#readme"
+  "scripts": {
+    "coverage": "npx nyc yarn run test",
+    "lint": "npx eslint **/*.ts",
+    "ncu": "npx yarn-tool ncu -u",
+    "npm:publish": "npm publish",
+    "prepublishOnly": "yarn run ncu && yarn run sort-package-json && yarn run test",
+    "postpublish": "git commit -m \"publish new version\" .",
+    "sort-package-json": "npx sort-package-json ./package.json",
+    "test": "ts-node ./test/test",
+    "tsc:default": "tsc -p tsconfig.json",
+    "tsc:esm": "tsc -p tsconfig.esm.json"
+  },
+  "dependencies": {
+    "@bluelovers/tsconfig": "^1.0.12",
+    "@ts-type/package-dts": "^1.0.4",
+    "find-up": "^4.1.0",
+    "json5": "^2.1.1",
+    "lodash": "^4.17.15",
+    "pkg-dir": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.144",
+    "@types/node": "^12.11.1"
+  },
+  "peerDependencies": {
+    "typescript": "^3"
+  }
 }

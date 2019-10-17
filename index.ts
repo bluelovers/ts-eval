@@ -2,25 +2,26 @@
  * Created by user on 2017/12/14/014.
  */
 
-import * as ts from 'typescript';
-import * as findUp from 'find-up';
-import * as pkgDir from 'pkg-dir';
+import { ITsconfig } from '@ts-type/package-dts/tsconfig-json';
 // @ts-ignore
-import * as fs from 'fs';
+import { ModuleKind, transpileModule } from 'typescript';
 // @ts-ignore
-import * as path from 'path';
+import findUp from 'find-up';
 // @ts-ignore
+import pkgDir from 'pkg-dir';
+import { existsSync, readFileSync } from 'fs';
+import { isAbsolute as pathIsAbsolute, join as pathJoin } from 'path';
 import * as util from 'util';
-// @ts-ignore
-import * as vm from 'vm';
-import * as JSON5 from 'json5';
-import * as deepmerge from 'deepmerge';
+import { runInContext, createContext, isContext } from 'vm';
+import JSON5 from 'json5';
+//import * as deepmerge from 'deepmerge';
+import deepmerge from 'lodash/merge';
 
 export let TSCONFIG_FILENAME = 'tsconfig.json';
-export let defaultTranspileOptions = {
+export let defaultTranspileOptions: ITsconfig = {
 	compilerOptions: {
-		module: ts.ModuleKind.CommonJS,
-		newLine: "lf",
+		module: ModuleKind.CommonJS,
+		newLine: "LF",
 		strict: false,
 	},
 };
@@ -32,24 +33,24 @@ export let defaultTranspileOptions = {
  * @returns {*}
  * @private
  */
-export let _require = function (path: string)
+export let _require = function <T = any>(path: string): T
 {
 	//return require(path);
-	return JSON5.parse(fs.readFileSync(path).toString());
+	return JSON5.parse(readFileSync(path).toString());
 };
 
 // @ts-ignore
 export function search_tsconfig(cwd: string = process.cwd()): string
 {
-	if (!path.isAbsolute(cwd))
+	if (!pathIsAbsolute(cwd))
 	{
 		// @ts-ignore
-		cwd = path.join(process.cwd(), cwd);
+		cwd = pathJoin(process.cwd(), cwd);
 	}
 
-	let ret = path.join(cwd, TSCONFIG_FILENAME);
+	let ret = pathJoin(cwd, TSCONFIG_FILENAME);
 
-	if (fs.existsSync(ret))
+	if (existsSync(ret))
 	{
 		return ret;
 	}
@@ -61,9 +62,9 @@ export function search_tsconfig(cwd: string = process.cwd()): string
 		return ret;
 	}
 
-	ret = path.join(pkgDir.sync(cwd), TSCONFIG_FILENAME);
+	ret = pathJoin(pkgDir.sync(cwd), TSCONFIG_FILENAME);
 
-	if (fs.existsSync(ret))
+	if (existsSync(ret))
 	{
 		return ret;
 	}
@@ -71,7 +72,7 @@ export function search_tsconfig(cwd: string = process.cwd()): string
 	return null;
 }
 
-export function tsOptions(transpileOptions?, ...argv)
+export function tsOptions(transpileOptions?, ...argv): ITsconfig
 {
 	if (!transpileOptions)
 	{
@@ -90,7 +91,7 @@ export function tsOptions(transpileOptions?, ...argv)
 
 	//console.log(transpileOptions);
 
-	return deepmerge.all([
+	return deepmerge([
 		{
 			newLine: "lf",
 		}, transpileOptions
@@ -103,7 +104,7 @@ export function transpile(code, transpileOptions?): string
 
 	//console.log(transpileOptions);
 
-	let r = ts.transpileModule(code, transpileOptions);
+	let r = transpileModule(code, transpileOptions);
 
 	//console.log(r.outputText);
 
@@ -127,7 +128,7 @@ export function transpileEval(code, transpileOptions?): string
 	return code;
 }
 
-export function tseval(code, context?, transpileOptions?)
+export function tseval<T = any>(code, context?, transpileOptions?): T
 {
 	console.warn(`tseval: this function is not work, pls use eval(transpile(code))`)
 
@@ -138,19 +139,19 @@ export function tseval(code, context?, transpileOptions?)
 
 	code = transpile(code, transpileOptions);
 
-	return vm.runInContext(code, vm.createContext(context || arguments.callee.caller))
+	return runInContext(code, createContext(context || arguments.callee.caller))
 
 	//return eval.call(context || arguments.callee.caller, code)
 	//return eval(transpile(code, transpileOptions));
 }
 
-export function evalSandbox(code, sandbox?, transpileOptions?)
+export function evalSandbox<T = any>(code, sandbox?, transpileOptions?): T
 {
 	code = transpile(code, transpileOptions);
 
-	return vm.runInContext(code, vm.isContext(sandbox) ? sandbox : vm.createContext(sandbox));
+	return runInContext(code, isContext(sandbox) ? sandbox : createContext(sandbox));
 }
 
-import * as tsEval from './index';
+const tsEval = exports as typeof import('./index');
 export { tsEval };
-export default tsEval;
+export default exports as typeof import('./index');

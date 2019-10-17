@@ -10,3 +10,10 @@ gen
 *.js
 *.d.ts
 /node_modules/
+/.nvmrc
+/tsconfig.esm.json.tpl
+/tsconfig.tsbuildinfo
+/yarn.lock
+/.browserslistrc
+/.eslintignore
+/.eslintrc.json.tpl
